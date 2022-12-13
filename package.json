@@ -7,7 +7,7 @@
     "execa": "^6.1.0",
     "minimist": "^1.2.0",
     "pify": "^3.0.0",
-    "tempfile": "^2.0.0",
+    "tempfile": "^4.0.0",
     "which": "^1.2.14"
   },
   "description": "A CLI for grabbing ios/android screenshots and saving to your clipboard or filesystem.",
