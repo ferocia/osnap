@@ -1,6 +1,6 @@
 import minimist from 'minimist'
 import { createError, ErrorCode } from './errors'
-import {temporaryFile} from 'tempy';
+import tempfile from 'tempfile';
 
 export type Platform = 'ios' | 'android'
 
@@ -52,7 +52,7 @@ export function parse(argv?: string[]): CliParameters {
   // grab what we need
   const platform = getPlatform(parsed)
   const useClipboard = !parsed['f']
-  const filename = (parsed['f'] as string) || temporaryFile({extension: 'png'});
+  const filename = (parsed['f'] as string) || tempfile('.png');
   const device = parsed['d'] as string
 
   return { platform, filename, device, useClipboard }

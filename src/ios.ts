@@ -1,7 +1,7 @@
 import { CliParameters } from './cli-parameters'
 import which from 'which'
 import { ErrorCode, createError } from './errors'
-import {execa} from 'execa'
+import {default as execa} from 'execa'
 
 /**
  * Finds the path to xcrun or throws an error.
@@ -42,7 +42,7 @@ export async function checkSimulator(xcrunPath: string, device?: string): Promis
   }
 
   // can't find what the user is looking for?
-  if (devices.indexOf(device) < 0) {
+  if (device && devices.indexOf(device) < 0) {
     throw createError(ErrorCode.MissingiOSSimulator)
   }
 

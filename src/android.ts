@@ -1,7 +1,7 @@
 import { CliParameters } from './cli-parameters'
 import { ErrorCode, createError } from './errors'
 import which from 'which'
-import {execa} from 'execa'
+import {default as execa} from 'execa'
 import { existsSync, createWriteStream } from 'fs'
 
 /**
@@ -62,11 +62,11 @@ export async function checkEmulator(adb: string, device?: string): Promise<strin
   }
 
   // can't find what the user is looking for?
-  if (devices.indexOf(device) < 0) {
+  if (device && devices.indexOf(device) < 0) {
     throw createError(ErrorCode.MissingAndroidEmulator)
   }
 
-  return device
+  return device || devices[0]
 }
 
 /**
@@ -84,7 +84,7 @@ export async function saveScreenshot(adb: string, perl: string, device: string, 
 
       // create the processes needed in the chain
       const adbProcess = execa(adb, ['-s', device, 'exec-out', 'screencap', '-p'], { maxBuffer })
-      adbProcess.stdout.pipe(createWriteStream(filename))
+      adbProcess.stdout?.pipe(createWriteStream(filename))
 
       // determine when we've ended
       adbProcess.on('exit', exitCode => {

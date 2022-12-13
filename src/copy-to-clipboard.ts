@@ -1,4 +1,4 @@
-import {execa} from 'execa'
+import {default as execa} from 'execa'
 import { ErrorCode, createError } from './errors'
 import { resolve } from 'path'
 
