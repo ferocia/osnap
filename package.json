@@ -8,7 +8,7 @@
     "minimist": "^1.2.0",
     "pify": "^3.0.0",
     "tempfile": "^2.0.0",
-    "which": "^1.2.14"
+    "which": "^3.0.0"
   },
   "description": "A CLI for grabbing ios/android screenshots and saving to your clipboard or filesystem.",
   "devDependencies": {
