@@ -7,7 +7,7 @@ A CLI for grabbing ios/android screenshots and saving to your clipboard or files
 # :writing_hand: Usage
 
 ```sh
-osnap [ios|android] [-f filename.png] [-d android_device_id]
+osnap [ios|android] [-f filename.png] [-d device_id]
 ```
 
 :apple: With iOS
