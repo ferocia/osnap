@@ -1,7 +1,7 @@
 import { CliParameters } from './cli-parameters'
-import { which } from './which'
+import which from 'which'
 import { ErrorCode, createError } from './errors'
-import * as execa from 'execa'
+import {execa} from 'execa'
 
 /**
  * Finds the path to xcrun or throws an error.
@@ -57,10 +57,7 @@ export async function checkSimulator(xcrunPath: string, device?: string): Promis
  */
 export async function saveScreenshot(xcrunPath: string, device: string, filename: string) {
   try {
-    const response = await execa(xcrunPath, ['simctl', 'io', device, 'screenshot', filename])
-    if (response.code !== 0) {
-      throw createError(ErrorCode.ScreenshotFail)
-    }
+    await execa(xcrunPath, ['simctl', 'io', device, 'screenshot', filename])
   } catch (err) {
     throw createError(ErrorCode.ScreenshotFail)
   }

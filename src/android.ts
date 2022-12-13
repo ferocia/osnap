@@ -1,7 +1,7 @@
 import { CliParameters } from './cli-parameters'
 import { ErrorCode, createError } from './errors'
-import { which } from './which'
-import * as execa from 'execa'
+import which from 'which'
+import {execa} from 'execa'
 import { existsSync, createWriteStream } from 'fs'
 
 /**
