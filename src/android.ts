@@ -36,7 +36,7 @@ export async function getPerlPath() {
  * @param adb The path to adb
  * @param device An optional target android device id
  */
-export async function checkEmulator(adb: string, device?: string) {
+export async function checkEmulator(adb: string, device?: string): Promise<string> {
   // get the list of simulators
   const response = await execa(adb, ['devices'])
   const stdout = response.stdout as string
@@ -65,6 +65,8 @@ export async function checkEmulator(adb: string, device?: string) {
   if (devices.indexOf(device) < 0) {
     throw createError(ErrorCode.MissingAndroidEmulator)
   }
+
+  return device
 }
 
 /**
@@ -75,9 +77,9 @@ export async function checkEmulator(adb: string, device?: string) {
  * @param filename The filename to save
  */
 export async function saveScreenshot(adb: string, perl: string, device: string, filename: string) {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     try {
-      // up the max buffer size since these could be huge iamges
+      // up the max buffer size since these could be huge images
       const maxBuffer = 1024 * 1000 * 50 // 50 MB
 
       // create the processes needed in the chain

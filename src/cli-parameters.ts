@@ -12,7 +12,7 @@ export interface CliParameters {
   platform?: Platform
   /** A file name to save the image. */
   filename: string
-  /** An optional device name for android if more than 1 device is plugged in. */
+  /** An optional device name for if more than 1 device is active. */
   device?: string
   /** Should we use the clipboard? */
   useClipboard: boolean
