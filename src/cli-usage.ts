@@ -8,12 +8,13 @@ export const usage = `📸  OSNAP ${version}
 
 ✍️  USAGE
 
-   osnap [ios|android] [-f filename.png] [-d android_device_id]
+   osnap [ios|android] [-f filename.png] [-d device_id]
 
 🍎  EXAMPLE :: iOS
 
    osnap ios
    osnap ios -f sweet.png
+   osnap ios -f sweet.png -d 6371666E-28B2-49A6-9026-C9944AA616DF
 
 🤖  EXAMPLE :: Android
 

@@ -35,7 +35,11 @@
     "screenshot"
   ],
   "license": "MIT",
-  "name": "osnap",
+  "name": "@ferocia-oss/osnap",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ferocia/osnap.git"
+  },
   "scripts": {
     "build": "tsc -p .",
     "build:mac": "gcc -Wall -O3 -ObjC -framework Foundation -framework AppKit -o macos/pbcopyimg macos/pbcopyimg.m",

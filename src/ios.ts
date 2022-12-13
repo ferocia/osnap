@@ -19,16 +19,34 @@ export async function getXcrunPath() {
  *
  * @param xcrunPath The path to xcrun
  */
-export async function checkSimulator(xcrunPath: string) {
+export async function checkSimulator(xcrunPath: string, device?: string): Promise<string> {
   // get the list of simulators
-  const response = await execa(xcrunPath, ['simctl', 'list'])
+  const response = await execa(xcrunPath, ['simctl', 'list', 'devices'])
   const stdout = response.stdout as string
 
-  // count the number of ones started
-  const reducer = (acc, line) => (line.indexOf('Booted') >= 0 ? acc + 1 : acc)
-  const count = stdout.split('\n').reduce(reducer, 0)
+  const devices = stdout.split('\n').filter(line => line.includes('(Booted)')).map(line => line.replace(/.+\(([A-F0-9\-]+)\).+/, '$1'))
 
-  if (count === 0) throw createError(ErrorCode.NoRunningiOSSimulators)
+  // not enough devices?
+  if (devices.length === 0) {
+    throw createError(ErrorCode.NoRunningiOSSimulators)
+  }
+
+  // only 1 and no preference?  just pick that.
+  if (devices.length === 1 && !device) {
+    return devices[0]
+  }
+
+  // too many devices?
+  if (devices.length > 1 && !device) {
+    throw createError(ErrorCode.AmbiguousiOSSimulator)
+  }
+
+  // can't find what the user is looking for?
+  if (devices.indexOf(device) < 0) {
+    throw createError(ErrorCode.MissingiOSSimulator)
+  }
+
+  return device || 'booted'
 }
 
 /**
@@ -37,9 +55,9 @@ export async function checkSimulator(xcrunPath: string) {
  * @param xcrunPath The path to xcrun
  * @param filename The filename to save
  */
-export async function saveScreenshot(xcrunPath: string, filename: string) {
+export async function saveScreenshot(xcrunPath: string, device: string, filename: string) {
   try {
-    const response = await execa(xcrunPath, ['simctl', 'io', 'booted', 'screenshot', filename])
+    const response = await execa(xcrunPath, ['simctl', 'io', device, 'screenshot', filename])
     if (response.code !== 0) {
       throw createError(ErrorCode.ScreenshotFail)
     }
@@ -55,6 +73,6 @@ export async function saveScreenshot(xcrunPath: string, filename: string) {
  */
 export async function saveToFile(parameters: CliParameters) {
   const xcrun = await getXcrunPath()
-  await checkSimulator(xcrun)
-  await saveScreenshot(xcrun, parameters.filename)
+  const device = await checkSimulator(xcrun, parameters.device)
+  await saveScreenshot(xcrun, device, parameters.filename)
 }
