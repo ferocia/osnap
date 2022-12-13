@@ -32,7 +32,7 @@ export async function run() {
       console.log(usage)
       return 0
     } else {
-      console.error(err.message)
+      console.error((err as Error).message)
       return 1
     }
   }
