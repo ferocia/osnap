@@ -1,4 +1,4 @@
-import * as execa from 'execa'
+import {execa} from 'execa'
 import { ErrorCode, createError } from './errors'
 import { resolve } from 'path'
 
