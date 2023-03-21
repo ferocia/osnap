@@ -10,6 +10,9 @@
     "which": "^3.0.0"
   },
   "description": "A CLI for grabbing ios/android screenshots and saving to your clipboard or filesystem.",
+  "resolutions": {
+    "got": "^11.8.5"
+  },
   "devDependencies": {
     "@types/minimist": "^1.2.2",
     "@types/node": "^18.11.14",
