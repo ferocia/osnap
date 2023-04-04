@@ -17,14 +17,14 @@ export enum ErrorCode {
   MissingiOSSimulator,
   ScreenshotFail,
   CopyToClipboardFail,
-  ClipboardPlatformUnsupported
+  ClipboardPlatformUnsupported,
 }
 
 export interface OsnapError extends Error {
   /** The error code */
-  code: ErrorCode
+  code: ErrorCode;
   /** Additional human-facing error message */
-  details?: string
+  details?: string;
 }
 
 const errorMap: { [code: number]: string } = {
@@ -42,8 +42,8 @@ const errorMap: { [code: number]: string } = {
   [ErrorCode.AmbiguousAndroidEmulator]: `Multiple Android devices connected, please specify a device with -d.`,
   [ErrorCode.AmbiguousiOSSimulator]: `Multiple iOS devices connected, please specify a device with -d.`,
   [ErrorCode.MissingAndroidEmulator]: `The specified Android device is currently not connected.`,
-  [ErrorCode.MissingiOSSimulator]: `The specified iOS device is currently not connected.`
-}
+  [ErrorCode.MissingiOSSimulator]: `The specified iOS device is currently not connected.`,
+};
 
 /**
  * Creates an OSnapError.
@@ -52,9 +52,9 @@ const errorMap: { [code: number]: string } = {
  * @param details An optional error message.
  */
 export function createError(code: ErrorCode, details?: string) {
-  const e = new Error() as OsnapError
-  e.message = errorMap[code]
-  e.details = details
-  e.code = code
-  return e
+  const e = new Error() as OsnapError;
+  e.message = errorMap[code];
+  e.details = details;
+  e.code = code;
+  return e;
 }
