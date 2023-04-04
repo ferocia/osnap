@@ -1,22 +1,22 @@
-import { CliParameters } from './cli-parameters'
-import { ErrorCode, createError } from './errors'
-import which from 'which'
-import {default as execa} from 'execa'
-import { existsSync, createWriteStream } from 'fs'
+import { CliParameters } from './cli-parameters';
+import { ErrorCode, createError } from './errors';
+import which from 'which';
+import { execa } from 'execa';
+import { existsSync, createWriteStream } from 'fs';
 
 /**
  * Finds the path to adb or throws an error.
  */
 export function getAdbPath() {
-  const androidHome = process.env['ANDROID_HOME']
+  const androidHome = process.env['ANDROID_HOME'];
   if (!androidHome) {
-    throw createError(ErrorCode.MissingAndroidHome)
+    throw createError(ErrorCode.MissingAndroidHome);
   }
-  const adb = `${androidHome}/platform-tools/adb`
+  const adb = `${androidHome}/platform-tools/adb`;
   if (!existsSync(adb)) {
-    throw createError(ErrorCode.MissingAndroidAdb)
+    throw createError(ErrorCode.MissingAndroidAdb);
   }
-  return adb
+  return adb;
 }
 
 /**
@@ -24,9 +24,9 @@ export function getAdbPath() {
  */
 export async function getPerlPath() {
   try {
-    return await which('perl')
+    return await which('perl');
   } catch (err) {
-    throw createError(ErrorCode.MissingPerl)
+    throw createError(ErrorCode.MissingPerl);
   }
 }
 
@@ -36,37 +36,40 @@ export async function getPerlPath() {
  * @param adb The path to adb
  * @param device An optional target android device id
  */
-export async function checkEmulator(adb: string, device?: string): Promise<string> {
+export async function checkEmulator(
+  adb: string,
+  device?: string
+): Promise<string> {
   // get the list of simulators
-  const response = await execa(adb, ['devices'])
-  const stdout = response.stdout as string
+  const response = await execa(adb, ['devices']);
+  const stdout = response.stdout as string;
 
   const devices = stdout
     .split('\n')
-    .filter(line => line.endsWith('\tdevice'))
-    .map(line => line.replace('\tdevice', ''))
+    .filter((line) => line.endsWith('\tdevice'))
+    .map((line) => line.replace('\tdevice', ''));
 
   // not enough devices?
   if (devices.length === 0) {
-    throw createError(ErrorCode.NoRunningAndroidEmulators)
+    throw createError(ErrorCode.NoRunningAndroidEmulators);
   }
 
   // only 1 and no preference?  just pick that.
   if (devices.length === 1 && !device) {
-    return devices[0]
+    return devices[0];
   }
 
   // too many devices?
   if (devices.length > 1 && !device) {
-    throw createError(ErrorCode.AmbiguousAndroidEmulator)
+    throw createError(ErrorCode.AmbiguousAndroidEmulator);
   }
 
   // can't find what the user is looking for?
   if (device && devices.indexOf(device) < 0) {
-    throw createError(ErrorCode.MissingAndroidEmulator)
+    throw createError(ErrorCode.MissingAndroidEmulator);
   }
 
-  return device || devices[0]
+  return device || devices[0];
 }
 
 /**
@@ -76,28 +79,37 @@ export async function checkEmulator(adb: string, device?: string): Promise<strin
  * @param device The android device id
  * @param filename The filename to save
  */
-export async function saveScreenshot(adb: string, perl: string, device: string, filename: string) {
+export async function saveScreenshot(
+  adb: string,
+  perl: string,
+  device: string,
+  filename: string
+) {
   return new Promise<void>((resolve, reject) => {
     try {
       // up the max buffer size since these could be huge images
-      const maxBuffer = 1024 * 1000 * 50 // 50 MB
+      const maxBuffer = 1024 * 1000 * 50; // 50 MB
 
       // create the processes needed in the chain
-      const adbProcess = execa(adb, ['-s', device, 'exec-out', 'screencap', '-p'], { maxBuffer })
-      adbProcess.stdout?.pipe(createWriteStream(filename))
+      const adbProcess = execa(
+        adb,
+        ['-s', device, 'exec-out', 'screencap', '-p'],
+        { maxBuffer }
+      );
+      adbProcess.stdout?.pipe(createWriteStream(filename));
 
       // determine when we've ended
-      adbProcess.on('exit', exitCode => {
+      adbProcess.on('exit', (exitCode) => {
         if (exitCode === 0) {
-          resolve()
+          resolve();
         } else {
-          reject()
+          reject();
         }
-      })
+      });
     } catch (err) {
-      throw createError(ErrorCode.ScreenshotFail)
+      throw createError(ErrorCode.ScreenshotFail);
     }
-  })
+  });
 }
 
 /**
@@ -106,8 +118,8 @@ export async function saveScreenshot(adb: string, perl: string, device: string, 
  * @param parameters The CLI parameters
  */
 export async function saveToFile(parameters: CliParameters) {
-  const adb = getAdbPath()
-  const perl = await getPerlPath()
-  const device = await checkEmulator(adb, parameters.device)
-  await saveScreenshot(adb, perl, device, parameters.filename)
+  const adb = getAdbPath();
+  const perl = await getPerlPath();
+  const device = await checkEmulator(adb, parameters.device);
+  await saveScreenshot(adb, perl, device, parameters.filename);
 }
