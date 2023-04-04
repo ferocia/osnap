@@ -1,9 +1,5 @@
 {
   "files.exclude": {
     "src/*.{d.ts,js}": true
-  },
-  // "prettier.parser": "typescript",
-  "prettier.semi": false,
-  "prettier.printWidth": 100,
-  "prettier.singleQuote": true
+  }
 }

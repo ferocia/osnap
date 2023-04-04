@@ -1,5 +1,8 @@
 {
-  "author": "Steve Kellock",
+  "authors": [
+    "Steve Kellock",
+    "Levi Buzolic"
+  ],
   "bin": {
     "osnap": "bin/osnap"
   },

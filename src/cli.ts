@@ -1,5 +1,5 @@
 import { parse } from './cli-parameters';
-import { OsnapError, ErrorCode } from './errors';
+import { type OsnapError, ErrorCode } from './errors';
 import { usage } from './cli-usage';
 import { saveToFile as iosSave } from './ios';
 import { saveToFile as androidSave } from './android';
