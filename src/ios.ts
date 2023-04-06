@@ -1,7 +1,6 @@
 import { CliParameters } from './cli-parameters';
 import which from 'which';
 import { ErrorCode, createError } from './errors';
-import { execa } from 'execa';
 
 /**
  * Finds the path to xcrun or throws an error.
@@ -23,6 +22,7 @@ export async function checkSimulator(
   xcrunPath: string,
   device?: string
 ): Promise<string> {
+  const { execa } = await import('execa');
   // get the list of simulators
   const response = await execa(xcrunPath, ['simctl', 'list', 'devices']);
   const stdout = response.stdout as string;
@@ -67,6 +67,7 @@ export async function saveScreenshot(
   filename: string
 ) {
   try {
+    const { execa } = await import('execa');
     await execa(xcrunPath, ['simctl', 'io', device, 'screenshot', filename]);
   } catch (err) {
     throw createError(ErrorCode.ScreenshotFail);

@@ -1,7 +1,6 @@
 import { CliParameters } from './cli-parameters';
 import { ErrorCode, createError } from './errors';
 import which from 'which';
-import { execa } from 'execa';
 import { existsSync, createWriteStream } from 'fs';
 
 /**
@@ -40,6 +39,7 @@ export async function checkEmulator(
   adb: string,
   device?: string
 ): Promise<string> {
+  const { execa } = await import('execa');
   // get the list of simulators
   const response = await execa(adb, ['devices']);
   const stdout = response.stdout as string;
@@ -85,6 +85,7 @@ export async function saveScreenshot(
   device: string,
   filename: string
 ) {
+  const { execa } = await import('execa');
   return new Promise<void>((resolve, reject) => {
     try {
       // up the max buffer size since these could be huge images

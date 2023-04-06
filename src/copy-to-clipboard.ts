@@ -1,4 +1,3 @@
-import { execa } from 'execa';
 import { ErrorCode, createError } from './errors';
 import { resolve } from 'path';
 
@@ -13,6 +12,7 @@ export async function copyToClipboard(imagePath: string) {
 
   // run the command to copy to the clipboard
   try {
+    const { execa } = await import('execa');
     await execa(pathToCopyApp, [imagePath]);
   } catch (err) {
     // was there a horrible issue?
