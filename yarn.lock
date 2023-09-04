@@ -1415,6 +1415,11 @@ isexe@^2.0.0:
   resolved "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
+isexe@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/isexe/-/isexe-3.1.1.tgz#4a407e2bd78ddfb14bea0c27c6f7072dde775f0d"
+  integrity sha512-LpB/54B+/2J5hqQ7imZHfdU31OlgQqx7ZicVlkm9kzg9/w8GKLEcFfJl/t7DCEDueOyBAD6zCCwTO6Fzs0NoEQ==
+
 issue-regex@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/issue-regex/-/issue-regex-4.1.0.tgz#e2039123748a48e6711eed7a9eb392f2c17c9341"
@@ -2772,12 +2777,12 @@ which@^2.0.1:
   dependencies:
     isexe "^2.0.0"
 
-which@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/which/-/which-3.0.0.tgz#a9efd016db59728758a390d23f1687b6e8f59f8e"
-  integrity sha512-nla//68K9NU6yRiwDY/Q8aU6siKlSs64aEC7+IV56QoAuyQT2ovsJcgGYGyqMOmI/CGN1BOR6mM5EN0FBO+zyQ==
+which@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/which/-/which-4.0.0.tgz#cd60b5e74503a3fbcfbf6cd6b4138a8bae644c1a"
+  integrity sha512-GlaYyEb07DPxYCKhKzplCWBJtvxZcZMrL+4UkrTSJHHPyZU4mYYTv3qaOe77H7EODLSSopAUFAc6W8U4yqvscg==
   dependencies:
-    isexe "^2.0.0"
+    isexe "^3.1.1"
 
 widest-line@^4.0.1:
   version "4.0.1"
