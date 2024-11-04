@@ -7,7 +7,7 @@
     "osnap": "bin/osnap"
   },
   "dependencies": {
-    "execa": "^8.0.1",
+    "execa": "^9.5.1",
     "minimist": "^1.2.7",
     "tempfile": "^5.0.0",
     "which": "^4.0.0"
