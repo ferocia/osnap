@@ -42,18 +42,18 @@ function getPlatform(parsed: minimist.ParsedArgs) {
  *
  * @param argv The parameters to use (default: reads from `process.argv`)
  */
-export function parse(argv?: string[]): CliParameters {
+export function parse(
   // use the default process args if nothing was passed in
-  argv = argv || process.argv.slice(2);
-
+  argv: string[] = process.argv.slice(2)
+): CliParameters {
   // parse the arguments with minimist
   const parsed = minimist(argv);
 
   // grab what we need
   const platform = getPlatform(parsed);
-  const useClipboard = !parsed['f'];
-  const filename = (parsed['f'] as string) || tempfile('.png');
-  const device = parsed['d'] as string;
+  const useClipboard = !parsed.f;
+  const filename = (parsed.f as string) || tempfile({ extension: 'png' });
+  const device = parsed.d as string;
 
   return { platform, filename, device, useClipboard };
 }
