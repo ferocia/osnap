@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@types/minimist": "^1.2.2",
-    "@types/node": "^22.9.0",
+    "@types/node": "^24.6.0",
     "@types/which": "^3.0.0",
     "np": "^10.2.0",
     "prettier": "^3.0.3",
