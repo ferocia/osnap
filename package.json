@@ -14,7 +14,8 @@
   },
   "description": "A CLI for grabbing ios/android screenshots and saving to your clipboard or filesystem.",
   "resolutions": {
-    "got": "^11.8.5"
+    "got": "^11.8.5",
+    "ignore-walk/**/minimatch": "^10.2.5"
   },
   "devDependencies": {
     "@types/minimist": "^1.2.2",
