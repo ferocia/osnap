@@ -10,7 +10,7 @@
     "execa": "^9.5.2",
     "minimist": "^1.2.7",
     "tempfile": "^5.0.0",
-    "which": "^4.0.0"
+    "which": "^5.0.0"
   },
   "description": "A CLI for grabbing ios/android screenshots and saving to your clipboard or filesystem.",
   "resolutions": {
