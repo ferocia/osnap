@@ -2,7 +2,7 @@
 
 A CLI for grabbing iOS/Android screenshots and saving to your clipboard or filesystem.
 
-<img src='https://raw.githubusercontent.com/ferocia/osnap/main/osnap-demo.gif' />
+![Demo](https://raw.githubusercontent.com/ferocia/osnap/main/osnap-demo.gif)
 
 ## :writing_hand: Usage
 
