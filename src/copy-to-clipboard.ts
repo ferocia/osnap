@@ -1,4 +1,4 @@
-import { ErrorCode, createError } from './errors';
+import { ErrorCode, createError } from './errors.js';
 import { resolve } from 'path';
 
 // TODO: support other platforms other than mac
