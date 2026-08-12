@@ -21,11 +21,14 @@
     "node": ">=22"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
     "@types/minimist": "^1.2.2",
     "@types/node": "^26.2.0",
     "@types/which": "^3.0.0",
+    "jest": "^30.4.2",
     "np": "^11.2.1",
     "prettier": "^3.0.3",
+    "ts-jest": "^29.4.12",
     "typescript": "^5.0.3"
   },
   "files": [
@@ -60,7 +63,7 @@
     "clean": "bash ./scripts/clean.sh",
     "pretty": "prettier --no-semi --single-quote --print-width 100 --parser typescript --write src/**/*.ts",
     "watch": "tsc -p . -w",
-    "test": "echo \"Error: no test specified\"",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "prerelease": "yarn build",
     "release": "np"
   },
