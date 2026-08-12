@@ -1,9 +1,9 @@
-import { parse } from './cli-parameters';
-import { type OsnapError, ErrorCode } from './errors';
-import { usage } from './cli-usage';
-import { saveToFile as iosSave } from './ios';
-import { saveToFile as androidSave } from './android';
-import { copyToClipboard } from './copy-to-clipboard';
+import { parse } from './cli-parameters.js';
+import { type OsnapError, ErrorCode } from './errors.js';
+import { usage } from './cli-usage.js';
+import { saveToFile as iosSave } from './ios.js';
+import { saveToFile as androidSave } from './android.js';
+import { copyToClipboard } from './copy-to-clipboard.js';
 
 /**
  * Runs the CLI and returns the exit code we should use.

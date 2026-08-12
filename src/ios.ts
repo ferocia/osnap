@@ -1,6 +1,6 @@
-import { CliParameters } from './cli-parameters';
+import { CliParameters } from './cli-parameters.js';
 import which from 'which';
-import { ErrorCode, createError } from './errors';
+import { ErrorCode, createError } from './errors.js';
 
 /**
  * Finds the path to xcrun or throws an error.

@@ -1,5 +1,5 @@
 import minimist from 'minimist';
-import { createError, ErrorCode } from './errors';
+import { createError, ErrorCode } from './errors.js';
 import tempfile from 'tempfile';
 
 export type Platform = 'ios' | 'android';

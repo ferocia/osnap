@@ -1,5 +1,5 @@
-import { CliParameters } from './cli-parameters';
-import { ErrorCode, createError } from './errors';
+import { CliParameters } from './cli-parameters.js';
+import { ErrorCode, createError } from './errors.js';
 import which from 'which';
 import { existsSync, createWriteStream } from 'fs';
 

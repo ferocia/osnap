@@ -1,49 +1,53 @@
-# :camera: osnap!
+# :camera: osnap
 
-A CLI for grabbing ios/android screenshots and saving to your clipboard or filesystem.
+A CLI for grabbing iOS/Android screenshots and saving to your clipboard or filesystem.
 
-<img src='https://raw.githubusercontent.com/ferocia/osnap/main/osnap-demo.gif' />
+![Demo](https://raw.githubusercontent.com/ferocia/osnap/main/osnap-demo.gif)
 
-# :writing_hand: Usage
+## :writing_hand: Usage
 
 ```sh
 osnap [ios|android] [-f filename.png] [-d device_id]
 ```
 
 :apple: With iOS
+
 ```sh
 osnap ios
 osnap ios -f sweet.png
 ```
 
 :robot: With Android
+
 ```sh
 osnap android
 osnap android -f cool.png
 osnap android -f omg.png -d emulator-5554
 ```
 
-# :golfing_woman: Installing
+## :golfing_woman: Installing
 
 ```sh
 npm i -g osnap
 ```
 
-# :baby_bottle: Requirements
+## :baby_bottle: Requirements
 
-* macos 10.10 and up
-* node 6 and up
-* either android or xcode toolchains
+- MacOS 26.6
+- Node 22 and up
+- Either Android or Xcode toolchains
 
-# :star2: Inspired By
+These are the currently tested versions. This may work in older versions.
 
-* http://www.alecjacobson.com/weblog/?p=3816
-* https://gist.github.com/mwender/49609a18be41b45b2ae4
+## :star2: Inspired By
 
-# :policeman: License
+- <http://www.alecjacobson.com/weblog/?p=3816>
+- <https://gist.github.com/mwender/49609a18be41b45b2ae4>
+
+## :policeman: License
 
 MIT
 
-# :dizzy: Change Log
+## :dizzy: Change Log
 
 See the [Releases](https://github.com/ferocia/osnap/releases) section.
