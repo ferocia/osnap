@@ -1,6 +1,5 @@
 import { CliParameters } from './cli-parameters.js'
 import { ErrorCode, createError } from './errors.js'
-import which from 'which'
 import { existsSync, createWriteStream } from 'fs'
 import { execa } from 'execa'
 import { pipeline } from 'node:stream/promises'
@@ -18,17 +17,6 @@ export function getAdbPath() {
     throw createError(ErrorCode.MissingAndroidAdb)
   }
   return adb
-}
-
-/**
- * Finds the path to perl or throws an error.
- */
-export async function getPerlPath() {
-  try {
-    return await which('perl')
-  } catch (err) {
-    throw createError(ErrorCode.MissingPerl)
-  }
 }
 
 /**
@@ -77,7 +65,7 @@ export async function checkEmulator(adb: string, device?: string): Promise<strin
  * @param device The android device id
  * @param filename The filename to save
  */
-export async function saveScreenshot(adb: string, perl: string, device: string, filename: string) {
+export async function saveScreenshot(adb: string, device: string, filename: string) {
   try {
     // up the max buffer size since these could be huge images
     const maxBuffer = 1024 * 1000 * 50 // 50 MB
@@ -100,7 +88,6 @@ export async function saveScreenshot(adb: string, perl: string, device: string, 
  */
 export async function saveToFile(parameters: CliParameters) {
   const adb = getAdbPath()
-  const perl = await getPerlPath()
   const device = await checkEmulator(adb, parameters.device)
-  await saveScreenshot(adb, perl, device, parameters.filename)
+  await saveScreenshot(adb, device, parameters.filename)
 }

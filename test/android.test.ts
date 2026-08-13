@@ -3,7 +3,6 @@ import { PassThrough, Writable } from 'node:stream'
 
 const mockExistsSync = jest.fn<(...args: any[]) => boolean>()
 const mockCreateWriteStream = jest.fn<(...args: any[]) => any>()
-const mockWhich = jest.fn<(...args: any[]) => Promise<any>>()
 const mockExeca = jest.fn<(...args: any[]) => any>()
 
 jest.unstable_mockModule('fs', () => {
@@ -13,19 +12,13 @@ jest.unstable_mockModule('fs', () => {
   }
 })
 
-jest.unstable_mockModule('which', () => {
-  return {
-    default: mockWhich,
-  }
-})
-
 jest.unstable_mockModule('execa', () => {
   return {
     execa: mockExeca,
   }
 })
 
-const { getAdbPath, getPerlPath, checkEmulator, saveScreenshot, saveToFile } = await import('../src/android.js')
+const { getAdbPath, checkEmulator, saveScreenshot, saveToFile } = await import('../src/android.js')
 const { ErrorCode } = await import('../src/errors.js')
 
 describe('Android Screenshot Module', () => {
@@ -40,7 +33,6 @@ describe('Android Screenshot Module', () => {
 
     mockExistsSync.mockReset()
     mockCreateWriteStream.mockReset()
-    mockWhich.mockReset()
     mockExeca.mockReset()
   })
 
@@ -67,22 +59,6 @@ describe('Android Screenshot Module', () => {
 
       expect(() => getAdbPath()).toThrow(
         expect.objectContaining({ code: ErrorCode.MissingAndroidAdb })
-      )
-    })
-  })
-
-  describe('getPerlPath', () => {
-    it('returns perl path if found', async () => {
-      mockWhich.mockResolvedValue('/usr/bin/perl')
-      const path = await getPerlPath()
-      expect(path).toBe('/usr/bin/perl')
-      expect(mockWhich).toHaveBeenCalledWith('perl')
-    })
-
-    it('throws MissingPerl if perl is not found', async () => {
-      mockWhich.mockRejectedValue(new Error('not found'))
-      await expect(getPerlPath()).rejects.toThrow(
-        expect.objectContaining({ code: ErrorCode.MissingPerl })
       )
     })
   })
@@ -143,7 +119,7 @@ describe('Android Screenshot Module', () => {
       })
       mockCreateWriteStream.mockReturnValue(mockWriteStream as any)
 
-      const save = saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')
+      const save = saveScreenshot('adb', 'emulator-5554', 'out.png')
       let completed = false
       void save.then(() => {
         completed = true
@@ -168,7 +144,7 @@ describe('Android Screenshot Module', () => {
       mockExeca.mockReturnValue(mockAdbProcess as any)
       mockCreateWriteStream.mockReturnValue(new Writable({ write: (_chunk, _encoding, callback) => callback() }))
 
-      await expect(saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')).rejects.toThrow(
+      await expect(saveScreenshot('adb', 'emulator-5554', 'out.png')).rejects.toThrow(
         expect.objectContaining({ code: ErrorCode.ScreenshotFail })
       )
     })
@@ -180,7 +156,7 @@ describe('Android Screenshot Module', () => {
       mockExeca.mockReturnValue(mockAdbProcess as any)
       mockCreateWriteStream.mockReturnValue(new Writable({ write: (_chunk, _encoding, callback) => callback() }))
 
-      await expect(saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')).rejects.toThrow(
+      await expect(saveScreenshot('adb', 'emulator-5554', 'out.png')).rejects.toThrow(
         expect.objectContaining({ code: ErrorCode.ScreenshotFail })
       )
     })
@@ -197,7 +173,7 @@ describe('Android Screenshot Module', () => {
         }) as any
       )
 
-      const save = saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')
+      const save = saveScreenshot('adb', 'emulator-5554', 'out.png')
       stdout.end('screenshot')
 
       await expect(save).rejects.toThrow(expect.objectContaining({ code: ErrorCode.ScreenshotFail }))
@@ -207,17 +183,16 @@ describe('Android Screenshot Module', () => {
       mockExeca.mockImplementation(() => {
         throw new Error('Sync error')
       })
-      await expect(saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')).rejects.toThrow(
+      await expect(saveScreenshot('adb', 'emulator-5554', 'out.png')).rejects.toThrow(
         expect.objectContaining({ code: ErrorCode.ScreenshotFail })
       )
     })
   })
 
   describe('saveToFile orchestration', () => {
-    it('coordinates getAdbPath, getPerlPath, checkEmulator, and saveScreenshot', async () => {
+    it('coordinates getAdbPath, checkEmulator, and saveScreenshot', async () => {
       process.env['ANDROID_HOME'] = '/home/user/Android'
       mockExistsSync.mockReturnValue(true) // adb exists
-      mockWhich.mockResolvedValue('/usr/bin/perl') // perl path
 
       const mockDevicesList = 'List of devices attached\nemulator-5554\tdevice\n'
       mockExeca.mockResolvedValueOnce({ stdout: mockDevicesList } as any) // adb devices
@@ -230,7 +205,6 @@ describe('Android Screenshot Module', () => {
 
       await saveToFile({ filename: 'out.png', useClipboard: false })
       expect(mockExistsSync).toHaveBeenCalled()
-      expect(mockWhich).toHaveBeenCalledWith('perl')
     })
   })
 })
