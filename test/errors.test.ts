@@ -13,4 +13,8 @@ describe('Errors Module', () => {
     expect(err.code).toBe(ErrorCode.InvalidPlatform)
     expect(err.details).toBe('extra info')
   })
+
+  it('does not expose the obsolete MissingPerl error code', () => {
+    expect(ErrorCode).not.toHaveProperty('MissingPerl')
+  })
 })
