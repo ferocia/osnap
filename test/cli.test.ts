@@ -38,8 +38,8 @@ describe('CLI Orchestrator', () => {
   let errorSpy: any
 
   beforeEach(() => {
-    logSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
-    errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+    logSpy = jest.spyOn(console, 'log').mockImplementation(() => { })
+    errorSpy = jest.spyOn(console, 'error').mockImplementation(() => { })
   })
 
   afterEach(() => {
@@ -106,7 +106,7 @@ describe('CLI Orchestrator', () => {
     const exitCode = await run()
     expect(exitCode).toBe(1)
     expect(errorSpy).toHaveBeenCalledWith(
-      'Some horrible happened while taking a screenshot.'
+      'An unexpected error happened while taking a screenshot.'
     )
   })
 })

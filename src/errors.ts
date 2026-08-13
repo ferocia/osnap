@@ -36,7 +36,7 @@ const errorMap: { [code: number]: string } = {
   [ErrorCode.MissingPerl]: `Unable to find perl which is used to clean up goofy output from adb.`,
   [ErrorCode.NoRunningiOSSimulators]: `No iOS simulators are running.`,
   [ErrorCode.NoRunningAndroidEmulators]: `No Android emulators or devices connected.`,
-  [ErrorCode.ScreenshotFail]: `Some horrible happened while taking a screenshot.`,
+  [ErrorCode.ScreenshotFail]: `An unexpected error happened while taking a screenshot.`,
   [ErrorCode.CopyToClipboardFail]: `Unable to copy the image bytes to the clipboard. Sorry about that.`,
   [ErrorCode.ClipboardPlatformUnsupported]: `Unable to copy to the clipboard on this platform. PRs welcome.`,
   [ErrorCode.AmbiguousAndroidEmulator]: `Multiple Android devices connected, please specify a device with -d.`,
