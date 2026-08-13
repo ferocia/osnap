@@ -3,6 +3,7 @@ import { ErrorCode, createError } from './errors.js'
 import which from 'which'
 import { existsSync, createWriteStream } from 'fs'
 import { execa } from 'execa'
+import { pipeline } from 'node:stream/promises'
 
 /**
  * Finds the path to adb or throws an error.
@@ -77,27 +78,19 @@ export async function checkEmulator(adb: string, device?: string): Promise<strin
  * @param filename The filename to save
  */
 export async function saveScreenshot(adb: string, perl: string, device: string, filename: string) {
-  return new Promise<void>((resolve, reject) => {
-    try {
-      // up the max buffer size since these could be huge images
-      const maxBuffer = 1024 * 1000 * 50 // 50 MB
+  try {
+    // up the max buffer size since these could be huge images
+    const maxBuffer = 1024 * 1000 * 50 // 50 MB
 
-      // create the processes needed in the chain
-      const adbProcess = execa(adb, ['-s', device, 'exec-out', 'screencap', '-p'], { maxBuffer })
-      adbProcess.stdout?.pipe(createWriteStream(filename))
-
-      // determine when we've ended
-      adbProcess.nodeChildProcess?.on('exit', (exitCode) => {
-        if (exitCode === 0) {
-          resolve()
-        } else {
-          reject()
-        }
-      })
-    } catch (err) {
-      throw createError(ErrorCode.ScreenshotFail)
+    const adbProcess = execa(adb, ['-s', device, 'exec-out', 'screencap', '-p'], { maxBuffer })
+    if (!adbProcess.stdout) {
+      throw new Error('adb did not provide screenshot output')
     }
-  })
+
+    await Promise.all([adbProcess, pipeline(adbProcess.stdout, createWriteStream(filename))])
+  } catch {
+    throw createError(ErrorCode.ScreenshotFail)
+  }
 }
 
 /**

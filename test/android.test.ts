@@ -1,4 +1,5 @@
 import { jest } from '@jest/globals'
+import { PassThrough, Writable } from 'node:stream'
 
 const mockExistsSync = jest.fn<(...args: any[]) => boolean>()
 const mockCreateWriteStream = jest.fn<(...args: any[]) => any>()
@@ -130,47 +131,76 @@ describe('Android Screenshot Module', () => {
   })
 
   describe('saveScreenshot', () => {
-    it('creates adb command, pipes stdout to write stream, and resolves on exit 0', async () => {
-      const mockOn = jest.fn((event, cb: any) => {
-        if (event === 'exit') {
-          setImmediate(() => cb(0))
-        }
-      })
-      const mockPipe = jest.fn()
-      const mockAdbProcess = {
-        stdout: { pipe: mockPipe },
-        nodeChildProcess: { on: mockOn },
-      }
+    it('creates adb command and resolves after screenshot output finishes writing', async () => {
+      const stdout = new PassThrough()
+      const mockAdbProcess = Object.assign(Promise.resolve({}), { stdout })
       mockExeca.mockReturnValue(mockAdbProcess as any)
 
-      const mockWriteStream = {}
+      const mockWriteStream = new Writable({
+        write(_chunk, _encoding, callback) {
+          callback()
+        },
+      })
       mockCreateWriteStream.mockReturnValue(mockWriteStream as any)
 
-      await saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')
+      const save = saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')
+      let completed = false
+      void save.then(() => {
+        completed = true
+      })
+      await Promise.resolve()
+      expect(completed).toBe(false)
+      stdout.end('screenshot')
+      await save
 
       expect(mockExeca).toHaveBeenCalledWith(
         'adb',
         ['-s', 'emulator-5554', 'exec-out', 'screencap', '-p'],
         { maxBuffer: 51200000 }
       )
-      expect(mockPipe).toHaveBeenCalledWith(mockWriteStream)
-      expect(mockOn).toHaveBeenCalledWith('exit', expect.any(Function))
+      expect(mockCreateWriteStream).toHaveBeenCalledWith('out.png')
     })
 
-    it('rejects if adb process exits with non-zero code', async () => {
-      const mockOn = jest.fn((event, cb: any) => {
-        if (event === 'exit') {
-          setImmediate(() => cb(1))
-        }
-      })
-      const mockPipe = jest.fn()
-      const mockAdbProcess = {
-        stdout: { pipe: mockPipe },
-        nodeChildProcess: { on: mockOn },
-      }
+    it('throws ScreenshotFail if adb process exits with non-zero code', async () => {
+      const stdout = new PassThrough()
+      stdout.end()
+      const mockAdbProcess = Object.assign(Promise.reject(new Error('adb failed')), { stdout })
       mockExeca.mockReturnValue(mockAdbProcess as any)
+      mockCreateWriteStream.mockReturnValue(new Writable({ write: (_chunk, _encoding, callback) => callback() }))
 
-      await expect(saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')).rejects.toBeUndefined()
+      await expect(saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')).rejects.toThrow(
+        expect.objectContaining({ code: ErrorCode.ScreenshotFail })
+      )
+    })
+
+    it('throws ScreenshotFail if adb cannot spawn', async () => {
+      const stdout = new PassThrough()
+      stdout.end()
+      const mockAdbProcess = Object.assign(Promise.reject(new Error('spawn adb ENOENT')), { stdout })
+      mockExeca.mockReturnValue(mockAdbProcess as any)
+      mockCreateWriteStream.mockReturnValue(new Writable({ write: (_chunk, _encoding, callback) => callback() }))
+
+      await expect(saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')).rejects.toThrow(
+        expect.objectContaining({ code: ErrorCode.ScreenshotFail })
+      )
+    })
+
+    it('throws ScreenshotFail if the screenshot file cannot be written', async () => {
+      const stdout = new PassThrough()
+      const mockAdbProcess = Object.assign(Promise.resolve({}), { stdout })
+      mockExeca.mockReturnValue(mockAdbProcess as any)
+      mockCreateWriteStream.mockReturnValue(
+        new Writable({
+          write(_chunk, _encoding, callback) {
+            callback(new Error('disk full'))
+          },
+        }) as any
+      )
+
+      const save = saveScreenshot('adb', 'perl', 'emulator-5554', 'out.png')
+      stdout.end('screenshot')
+
+      await expect(save).rejects.toThrow(expect.objectContaining({ code: ErrorCode.ScreenshotFail }))
     })
 
     it('throws ScreenshotFail if execa throws synchronous error', async () => {
@@ -192,16 +222,11 @@ describe('Android Screenshot Module', () => {
       const mockDevicesList = 'List of devices attached\nemulator-5554\tdevice\n'
       mockExeca.mockResolvedValueOnce({ stdout: mockDevicesList } as any) // adb devices
 
-      const mockOn = jest.fn((event, cb: any) => {
-        if (event === 'exit') {
-          setImmediate(() => cb(0))
-        }
-      })
-      const mockAdbProcess = {
-        stdout: { pipe: jest.fn() },
-        nodeChildProcess: { on: mockOn },
-      }
+      const stdout = new PassThrough()
+      stdout.end()
+      const mockAdbProcess = Object.assign(Promise.resolve({}), { stdout })
       mockExeca.mockReturnValueOnce(mockAdbProcess as any) // saveScreenshot adb call
+      mockCreateWriteStream.mockReturnValue(new Writable({ write: (_chunk, _encoding, callback) => callback() }))
 
       await saveToFile({ filename: 'out.png', useClipboard: false })
       expect(mockExistsSync).toHaveBeenCalled()
