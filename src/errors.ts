@@ -8,7 +8,6 @@ export enum ErrorCode {
   MissingXcrun,
   MissingAndroidHome,
   MissingAndroidAdb,
-  MissingPerl,
   NoRunningiOSSimulators,
   NoRunningAndroidEmulators,
   AmbiguousAndroidEmulator,
@@ -22,9 +21,9 @@ export enum ErrorCode {
 
 export interface OsnapError extends Error {
   /** The error code */
-  code: ErrorCode;
+  code: ErrorCode
   /** Additional human-facing error message */
-  details?: string;
+  details?: string
 }
 
 const errorMap: { [code: number]: string } = {
@@ -33,17 +32,16 @@ const errorMap: { [code: number]: string } = {
   [ErrorCode.MissingXcrun]: `Unable to find 'xcrun' on your path.`,
   [ErrorCode.MissingAndroidHome]: `Unable to find ANDROID_HOME environment variable.`,
   [ErrorCode.MissingAndroidAdb]: `Unable to find adb.`,
-  [ErrorCode.MissingPerl]: `Unable to find perl which is used to clean up goofy output from adb.`,
   [ErrorCode.NoRunningiOSSimulators]: `No iOS simulators are running.`,
   [ErrorCode.NoRunningAndroidEmulators]: `No Android emulators or devices connected.`,
-  [ErrorCode.ScreenshotFail]: `Some horrible happened while taking a screenshot.`,
+  [ErrorCode.ScreenshotFail]: `An unexpected error happened while taking a screenshot.`,
   [ErrorCode.CopyToClipboardFail]: `Unable to copy the image bytes to the clipboard. Sorry about that.`,
   [ErrorCode.ClipboardPlatformUnsupported]: `Unable to copy to the clipboard on this platform. PRs welcome.`,
   [ErrorCode.AmbiguousAndroidEmulator]: `Multiple Android devices connected, please specify a device with -d.`,
   [ErrorCode.AmbiguousiOSSimulator]: `Multiple iOS devices connected, please specify a device with -d.`,
   [ErrorCode.MissingAndroidEmulator]: `The specified Android device is currently not connected.`,
   [ErrorCode.MissingiOSSimulator]: `The specified iOS device is currently not connected.`,
-};
+}
 
 /**
  * Creates an OSnapError.
@@ -52,9 +50,9 @@ const errorMap: { [code: number]: string } = {
  * @param details An optional error message.
  */
 export function createError(code: ErrorCode, details?: string) {
-  const e = new Error() as OsnapError;
-  e.message = errorMap[code];
-  e.details = details;
-  e.code = code;
-  return e;
+  const e = new Error() as OsnapError
+  e.message = errorMap[code]
+  e.details = details
+  e.code = code
+  return e
 }

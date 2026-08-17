@@ -1,8 +1,8 @@
-import { readFileSync } from 'fs';
+import { readFileSync } from 'fs'
+import { join } from 'path'
 
-const version = JSON.parse(
-  readFileSync(`${__dirname}/../package.json`).toString()
-).version;
+const packageJsonPath = join(import.meta.dirname, '../package.json')
+const version = JSON.parse(readFileSync(packageJsonPath).toString()).version
 
 export const usage = `📸  OSNAP ${version}
 
@@ -27,4 +27,4 @@ export const usage = `📸  OSNAP ${version}
 💃  ABOUT
 
    https://github.com/skellock/osnap
-`;
+`

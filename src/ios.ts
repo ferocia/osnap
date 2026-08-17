@@ -1,15 +1,16 @@
-import { CliParameters } from './cli-parameters.js';
-import which from 'which';
-import { ErrorCode, createError } from './errors.js';
+import { CliParameters } from './cli-parameters.js'
+import which from 'which'
+import { ErrorCode, createError } from './errors.js'
+import { execa } from 'execa'
 
 /**
  * Finds the path to xcrun or throws an error.
  */
 export async function getXcrunPath() {
   try {
-    return await which('xcrun');
+    return await which('xcrun')
   } catch (err) {
-    throw createError(ErrorCode.MissingXcrun);
+    throw createError(ErrorCode.MissingXcrun)
   }
 }
 
@@ -18,41 +19,37 @@ export async function getXcrunPath() {
  *
  * @param xcrunPath The path to xcrun
  */
-export async function checkSimulator(
-  xcrunPath: string,
-  device?: string
-): Promise<string> {
-  const { execa } = await import('execa');
+export async function checkSimulator(xcrunPath: string, device?: string): Promise<string> {
   // get the list of simulators
-  const response = await execa(xcrunPath, ['simctl', 'list', 'devices']);
-  const stdout = response.stdout as string;
+  const response = await execa(xcrunPath, ['simctl', 'list', 'devices'])
+  const stdout = response.stdout as string
 
   const devices = stdout
     .split('\n')
     .filter((line) => line.includes('(Booted)'))
-    .map((line) => line.replace(/.+\(([A-F0-9\-]+)\).+/, '$1'));
+    .map((line) => line.replace(/.+\(([A-F0-9\-]+)\).+/, '$1'))
 
   // not enough devices?
   if (devices.length === 0) {
-    throw createError(ErrorCode.NoRunningiOSSimulators);
+    throw createError(ErrorCode.NoRunningiOSSimulators)
   }
 
   // only 1 and no preference?  just pick that.
   if (devices.length === 1 && !device) {
-    return devices[0];
+    return devices[0]
   }
 
   // too many devices?
   if (devices.length > 1 && !device) {
-    throw createError(ErrorCode.AmbiguousiOSSimulator);
+    throw createError(ErrorCode.AmbiguousiOSSimulator)
   }
 
   // can't find what the user is looking for?
   if (device && devices.indexOf(device) < 0) {
-    throw createError(ErrorCode.MissingiOSSimulator);
+    throw createError(ErrorCode.MissingiOSSimulator)
   }
 
-  return device || 'booted';
+  return device || 'booted'
 }
 
 /**
@@ -61,16 +58,11 @@ export async function checkSimulator(
  * @param xcrunPath The path to xcrun
  * @param filename The filename to save
  */
-export async function saveScreenshot(
-  xcrunPath: string,
-  device: string,
-  filename: string
-) {
+export async function saveScreenshot(xcrunPath: string, device: string, filename: string) {
   try {
-    const { execa } = await import('execa');
-    await execa(xcrunPath, ['simctl', 'io', device, 'screenshot', filename]);
+    await execa(xcrunPath, ['simctl', 'io', device, 'screenshot', filename])
   } catch (err) {
-    throw createError(ErrorCode.ScreenshotFail);
+    throw createError(ErrorCode.ScreenshotFail)
   }
 }
 
@@ -80,7 +72,7 @@ export async function saveScreenshot(
  * @param parameters The CLI parameters
  */
 export async function saveToFile(parameters: CliParameters) {
-  const xcrun = await getXcrunPath();
-  const device = await checkSimulator(xcrun, parameters.device);
-  await saveScreenshot(xcrun, device, parameters.filename);
+  const xcrun = await getXcrunPath()
+  const device = await checkSimulator(xcrun, parameters.device)
+  await saveScreenshot(xcrun, device, parameters.filename)
 }
