@@ -5,3 +5,8 @@
 /src/*.d.ts
 /test/*.js
 /test/*.d.ts
+
+# Yarn v4
+**/.pnp.*
+**/.yarn/*
+!**/.yarn/patches/
