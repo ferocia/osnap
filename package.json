@@ -9,7 +9,7 @@
   "dependencies": {
     "execa": "^10.0.1",
     "minimist": "^1.2.7",
-    "tempfile": "^5.0.0",
+    "tempfile": "^6.0.1",
     "which": "^7.0.0"
   },
   "description": "A CLI for grabbing ios/android screenshots and saving to your clipboard or filesystem.",

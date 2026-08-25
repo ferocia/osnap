@@ -2480,6 +2480,11 @@ is-promise@^2.1.0:
   resolved "https://registry.npmjs.org/is-promise/-/is-promise-2.2.2.tgz#39ab959ccbf9a774cf079f7b40c7a26f763135f1"
   integrity sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==
 
+is-safe-filename@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/is-safe-filename/-/is-safe-filename-0.1.1.tgz#fb22eead097c614c47aa674de5d79a1648a53e66"
+  integrity sha512-4SrR7AdnY11LHfDKTZY1u6Ga3RuxZdl3YKWWShO5iyuG5h8QS4GD2tOb04peBJ5I7pXbR+CGBNEhTcwK+FzN3g==
+
 is-scoped@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/is-scoped/-/is-scoped-3.0.0.tgz#2f9fc6e37c17d432d8e38d3c749aab8c76d1bdd8"
@@ -4175,11 +4180,12 @@ temp-dir@^3.0.0:
   resolved "https://registry.yarnpkg.com/temp-dir/-/temp-dir-3.0.0.tgz#7f147b42ee41234cc6ba3138cd8e8aa2302acffa"
   integrity sha512-nHc6S/bwIilKHNRgK/3jlhDoIHcp45YgyiwcAk46Tr0LfEqGBVpmiAyuiuxeVE44m3mXnEeVhaipLOEWmH+Njw==
 
-tempfile@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/tempfile/-/tempfile-5.0.0.tgz#40c141e441709fe2d9c17c138e81d4c33fbc9e03"
-  integrity sha512-bX655WZI/F7EoTDw9JvQURqAXiPHi8o8+yFxPF2lWYyz1aHnmMRuXWqL6YB6GmeO0o4DIYWHLgGNi/X64T+X4Q==
+tempfile@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/tempfile/-/tempfile-6.0.1.tgz#9e0f530aae237660cadfb111c7374c66f39b3927"
+  integrity sha512-DE4nURsf7nUqYHJKTgOVdpt0SBY5r4us4kbFXqg7KZFB7ih27NxIk3qXv29FtqTaE45stnLKTECmSc9ICuRbDQ==
   dependencies:
+    is-safe-filename "^0.1.1"
     temp-dir "^3.0.0"
 
 terminal-link@^5.0.0:
