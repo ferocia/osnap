@@ -22,4 +22,5 @@ jobs:
       - run: corepack enable
       - run: yarn install --immutable
       - run: yarn test
+      - run: yarn build
       - run: yarn npm publish --staged
