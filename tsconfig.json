@@ -11,6 +11,10 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "target": "esnext",
+    "types": [
+      "node",
+      "jest"
+    ],
     "lib": [
       "esnext"
     ],
